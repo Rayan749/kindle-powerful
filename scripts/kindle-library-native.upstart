@@ -1,0 +1,16 @@
+description "Native X11 Kindle library"
+start on started kppmainapp
+stop on stopping framework
+respawn
+respawn limit 5 60
+pre-start script
+    pkill -9 -f /mnt/us/jobman/jobman 2>/dev/null || true
+    pkill -9 -f /mnt/us/library-lifecycle.lua 2>/dev/null || true
+end script
+script
+    export KINDLE_DISPLAY=x11
+    exec /mnt/us/kindle-library-x11 >>/mnt/us/x11-console.log 2>&1
+end script
+post-stop script
+    pkill -9 -f /mnt/us/library-lifecycle.lua 2>/dev/null || true
+end script

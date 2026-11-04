@@ -1,0 +1,2 @@
+{"def":"handlerId","assoc":{"handlerId":"org.kindlepowerful.library","props":{"keepLoaded":"true","lipcId":"org.kindlepowerful.library"}}},
+{"def":"association","assoc":{"interface":"application","handlerId":"org.kindlepowerful.library","contentIds":["none"]}}

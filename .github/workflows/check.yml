@@ -1,0 +1,26 @@
+name: Check source
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  kindle:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/kindle-library
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+      - run: go test ./...
+      - run: go vet ./...
+      - run: GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=0 go build ./...
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+      - run: sh scripts/build-macos-deployer.sh

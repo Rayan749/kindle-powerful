@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+# 由 scripts/kindle-push.sh 调用；密码从 KINDLE_PW 环境变量读取，不落盘。
+set timeout 300
+if {![info exists env(KINDLE_PW)]} {
+    puts stderr "KINDLE_PW not set"
+    exit 2
+}
+set user "root"
+if {[info exists env(KINDLE_USER)]} { set user $env(KINDLE_USER) }
+set attempts 0
+log_user 0
+spawn /usr/bin/scp -o ConnectTimeout=10 \
+    -o "UserKnownHostsFile=\"$env(KINDLE_KNOWN_HOSTS)\"" \
+    -o StrictHostKeyChecking=accept-new \
+    $env(KINDLE_LOCAL) "$user@$env(KINDLE_HOST):$env(KINDLE_REMOTE)"
+log_user 1
+expect {
+    -re "(?i)password:" {
+        incr attempts
+        if {$attempts > 1} { puts stderr "Authentication failed"; exit 4 }
+        send -- "$env(KINDLE_PW)\r"
+        exp_continue
+    }
+    timeout { puts stderr "scp timeout"; exit 3 }
+    eof
+}
+catch wait result
+exit [lindex $result 3]

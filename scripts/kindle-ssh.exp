@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+# 由 scripts/kindle-ssh.sh 调用；密码从 KINDLE_PW 环境变量读取，不落盘。
+set timeout 180
+if {![info exists env(KINDLE_PW)]} {
+    puts stderr "KINDLE_PW not set"
+    exit 2
+}
+set host $env(KINDLE_HOST)
+set b64 $env(KINDLE_B64)
+set known $env(KINDLE_KNOWN_HOSTS)
+set user "root"
+if {[info exists env(KINDLE_USER)]} { set user $env(KINDLE_USER) }
+set attempts 0
+log_user 0
+spawn /usr/bin/ssh -o ConnectTimeout=20 -o "UserKnownHostsFile=\"$known\"" -o StrictHostKeyChecking=accept-new "$user@$host" "echo $b64 | base64 -d | sh"
+log_user 1
+expect {
+    -re "(?i)password:" {
+        incr attempts
+        if {$attempts > 1} { puts stderr "Authentication failed"; exit 4 }
+        send -- "$env(KINDLE_PW)\r"
+        exp_continue
+    }
+    timeout { puts stderr "ssh timeout"; exit 3 }
+    eof
+}
+catch wait result
+exit [lindex $result 3]
