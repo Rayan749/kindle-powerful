@@ -11,6 +11,14 @@
 - macOS Intel/Apple Silicon 通用部署器：连接检查、部署、恢复系统主页。
 - 可选 KPP 注册检测补丁，默认不勾选，严格校验文件哈希，先备份再原子替换。
 
+## 真机截图
+
+Paperwhite 4 / 固件 5.17.1.0.3 实机采集，点击图片查看原图。
+
+| 自绘图书馆 | 图书选中反馈 | 下拉快捷面板 |
+| --- | --- | --- |
+| [![PW4 自绘图书馆](docs/images/library-pw4.png)](docs/images/library-pw4.png) | [![整行黑底白字选中反馈](docs/images/selection-pw4.png)](docs/images/selection-pw4.png) | [![亮度、设置和越狱管理快捷面板](docs/images/quick-panel-pw4.png)](docs/images/quick-panel-pw4.png) |
+
 ## 适配范围
 
 当前仅在 **Paperwhite 4 / 固件5.17.1.0.3 / 1072×1448 / 8位X11** 验证。深度休眠恢复已获得用户真机确认。其他型号、固件和阅读文件需要单独验证；本项目不承诺阅读器性能提升。
